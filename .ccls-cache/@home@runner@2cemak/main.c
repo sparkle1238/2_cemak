@@ -65,9 +65,9 @@ int main() {
 
   //вывод
   printf("1)вывод\n");
-  printf("| age   | height   |\n");
+  printf("| age   | height  | mark\n");
   for (int i = 0; i < j; i++)
-    printf("|  %3.d  | %.2lf  |%s\n", student[i].age, student[i].height, student[j].mark);
+    printf("|  %3.d  | %.2lf  | %s\n", student[i].age, student[i].height, student[i].mark);
   printf("------------------\n");
   //сортировка
   printf("2)сортировка\n");
@@ -75,14 +75,14 @@ int main() {
         (int (*)(const void *,
                  const void *))comp); // qsort или можно написать пузырек
   for (int i = 0; i < j; i++)
-    printf("|  %3.d  | %.2lf  | %s\n", student[i].age, student[i].height, student[j].mark);
+    printf("|  %3.d  | %.2lf  | %s\n", student[i].age, student[i].height, student[i].mark);
   printf("------------------\n");
   //фильтр
   printf("3)фильтр все старше 16 \n");
   for (int i = 0; i < j; i++)
     if (student[i].age > 16)
       printf("|  %3.d  | %.2lf  | %s\n", student[i].age, student[i].height,
-             student[j].mark);
+             student[i].mark);
   printf("------------------\n");
 
   //закрытие файла

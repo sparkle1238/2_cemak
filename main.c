@@ -14,7 +14,10 @@
 #include <stdio.h>
 #include <stdlib.h> //qsort,atoi
 
-int comp(const int *i, const int *j) { return *i - *j; }
+int comp(const int *i, const int *j) 
+{
+  return *i - *j; 
+}
 
 //структура
 struct Student {
@@ -22,6 +25,13 @@ struct Student {
   char mark[3];
   double height;
 };
+
+void cout(struct Student *student,int j)
+{
+  for (int i = 0; i < j; i++)
+    printf("|  %3.d  | %.2lf  | %s\n", student[i].age, student[i].height, student[i].mark);
+  printf("------------------\n");
+}
 
 int main() {
   char symbol, symbol2;
@@ -65,26 +75,15 @@ int main() {
 
   //вывод
   printf("1)вывод\n");
-  printf("| age   | height   |\n");
-  for (int i = 0; i < j; i++)
-    printf("|  %3.d  | %.2lf  |%s\n", student[i].age, student[i].height, student[j].mark);
-  printf("------------------\n");
+  printf("| age   | height  | mark\n");
+  cout(student,j);
   //сортировка
   printf("2)сортировка\n");
-  qsort(student, j, sizeof(student[0]),
-        (int (*)(const void *,
-                 const void *))comp); // qsort или можно написать пузырек
-  for (int i = 0; i < j; i++)
-    printf("|  %3.d  | %.2lf  | %s\n", student[i].age, student[i].height, student[j].mark);
-  printf("------------------\n");
+  qsort(student, j, sizeof(student[0]),(int (*)(const void *,const void *))comp); // qsort или можно написать пузырек
+  cout(student,j);
   //фильтр
   printf("3)фильтр все старше 16 \n");
-  for (int i = 0; i < j; i++)
-    if (student[i].age > 16)
-      printf("|  %3.d  | %.2lf  | %s\n", student[i].age, student[i].height,
-             student[j].mark);
-  printf("------------------\n");
-
+  cout(student,j);
   //закрытие файла
   fclose(test);
 
