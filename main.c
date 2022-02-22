@@ -14,78 +14,90 @@
 #include <stdio.h>
 #include <stdlib.h> //qsort,atoi
 
-int comp(const int *i, const int *j) 
+//функции, которая умеет сравнивать два элемента массива
+int Comp(const int *i, const int *j) 
 {
   return *i - *j; 
 }
 
 //структура
-struct Student {
+struct Student 
+{
   int age;
   char mark[3];
   double height;
 };
 
-void cout(struct Student *student,int j)
+//красивый вывод
+void Cout(struct Student *student,int j)
 {
+  printf("__________________________\n| age   | height  | mark |\n|-------+---------+------|\n");
   for (int i = 0; i < j; i++)
-    printf("|  %3.d  | %.2lf  | %s\n", student[i].age, student[i].height, student[i].mark);
-  printf("------------------\n");
+    printf("|  %3.d  | %.2lf  | %s  |\n|-------+---------+------|\n", student[i].age, student[i].height, student[i].mark);
 }
 
-int main() {
-  char symbol, symbol2;
-  char *ptrEnd;
-  struct Student student[100];
-  FILE *test = fopen("test.json", "r");
-  int j = 0; //количество студентов
 
+int Teble(FILE *test,struct Student *student,int j)
+{  
+  char *ptrEnd;
+  char symbol, symbol2;
   //идем до конца файла
-  while ((symbol2 = fgetc(test)) != EOF) {
-    if (symbol == 'e' && symbol2 == '"') {
+  while ((symbol2 = fgetc(test)) != EOF) 
+  {
+    if (symbol == 'e' && symbol2 == '"') 
+    {
       char str[7]; //создаем временное хранилище
-      fseek(test, 2, SEEK_CUR); //курсор  : (поток,количество символов которые
-                                //пропустим,откуда начинать  )
+      fseek(test, 2, SEEK_CUR); //курсор  : (поток,количество символов которые пропустим,откуда начинать  )
       fgets(str, 4, test); //(куда записываем ,сколько символов, поток)
       student[j].age = atoi(str); //перевод из строки в int
     }
-    if (symbol == 't' && symbol2 == '"') {
+    if (symbol == 't' && symbol2 == '"') 
+    {
       char arr[8];
       fseek(test, 2, SEEK_CUR);
       fgets(arr, 7, test);
       student[j].height = strtod(arr, NULL); // перевод из строки в дабл
     }
-    if (symbol == 'k' && symbol2 == '"') {
+    if (symbol == 'k' && symbol2 == '"') 
+    {
       int k = 0;
-      while (symbol != '\n') {
+      while (symbol != '\n') 
+      {
         symbol = symbol2;
         symbol2 = fgetc(test);
-
-        if ((symbol == ',' || symbol == '[') && symbol2 == '"') {
+        if ((symbol == ',' || symbol == '[') && symbol2 == '"') 
+        {
           student[j].mark[k] = fgetc(test);
           k++;
         }
       }
     }
-
     if (symbol == '}')
       j++;
     symbol = symbol2;
   }
+return j;
+}
 
+
+int main() 
+{
+  struct Student student[100];
+  FILE *test = fopen("test.json", "r");
+  int j = Teble(test,student,0);
   //вывод
-  printf("1)вывод\n");
-  printf("| age   | height  | mark\n");
-  cout(student,j);
+  printf("\n1)вывод\n");
+  Cout(student,j);
   //сортировка
-  printf("2)сортировка\n");
-  qsort(student, j, sizeof(student[0]),(int (*)(const void *,const void *))comp); // qsort или можно написать пузырек
-  cout(student,j);
+  printf("\n2)сортировка\n");
+  qsort(student, j, sizeof(student[0]),Comp); // qsort или можно написать пузырек
+  Cout(student,j);
   //фильтр
-  printf("3)фильтр все старше 16 \n");
-  cout(student,j);
-  //закрытие файла
-  fclose(test);
-
+  printf("\n3)фильтр все старше 16 \n");
+  printf("__________________________\n| age   | height  | mark |\n|-------+---------+------|\n");
+  for (int i = 0; i < j; i++)
+    if(student[i].age>16)
+      printf("|  %3.d  | %.2lf  | %s  |\n|-------+---------+------|\n", student[i].age, student[i].height, student[i].mark); 
+  fclose(test);//закрытие файла
   return 0;
 }
