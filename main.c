@@ -84,8 +84,15 @@ return j;
 
 int main() 
 {
+  FILE* test = NULL;
+  test=fopen("test.json","r");
+  if (test==NULL)
+  {
+      perror("opening file (r)");
+      return 1;
+  }
+  
   struct Student student[100];
-  FILE *test = fopen("test.json", "r");
   int j = Teble(test,student,0);
   //вывод
   printf("\n1)вывод\n");
