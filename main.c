@@ -62,7 +62,6 @@ void Cout(struct Student *student,int spisoc)
 
 int Teble(FILE *test,struct Student *student,int spisoc)
 {  
-  char *ptrEnd;
   char symbol, symbol2;
   //идем до конца файла
   while ((symbol2 = fgetc(test)) != EOF) 
@@ -74,19 +73,22 @@ int Teble(FILE *test,struct Student *student,int spisoc)
       fgets(str, 4, test); //(куда записываем ,сколько символов, поток)
       student[spisoc].age = atoi(str); //перевод из строки в int
     }
+    
     if (symbol == 'h' && symbol2 == 't') 
     {
-      char arr[8];
+      char arr[8]={};
       fseek(test, 3, SEEK_CUR);
       fgets(arr, 7, test);
       student[spisoc].height = strtod(arr, NULL); // перевод из строки в дабл
     }
+    
     if (symbol == 'r' && symbol2 == 'k') 
     {
       char arr[10] ={};
       ArrJson(symbol2,test,arr);
       strcpy(student[spisoc].mark, arr);
     }
+    
     if (symbol == 'm' && symbol2 == 'e') 
     {
       char arr[10]={};
@@ -94,8 +96,7 @@ int Teble(FILE *test,struct Student *student,int spisoc)
       strcpy(student[spisoc].name, arr);
     }
     
-    if (symbol == '}')
-      spisoc++;
+    if (symbol == '}') spisoc++; // увеличиваем количество студентов 
     symbol = symbol2;
   }
 return spisoc;
