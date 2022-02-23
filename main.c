@@ -16,6 +16,9 @@
 #include <stdio.h>
 #include <stdlib.h> //qsort,atoi
 
+#define PRINT_TABLE  printf("| %6s |  %3.d  | %.2lf  | %s  |\n|--------+-------+---------+------|\n",student[i].name, student[i].age, student[i].height, student[i].mark); 
+#define PRINT_HEAD  printf("___________________________________\n|  name  | age   | height  | mark |\n|--------+-------+---------+------|\n");
+
 //функции, которая умеет сравнивать два элемента массива
 int Comp(const int *i, const int *j) 
 {
@@ -50,13 +53,9 @@ void ArrJson(char symbol2, FILE *test, char *arr)
 //красивый вывод
 void Cout(struct Student *student,int spisoc)
 {
-  printf("___________________________________\n"
-         "|  name  | age   | height  | mark |\n"
-         "|--------+-------+---------+------|\n");
+  PRINT_HEAD;
   for (int i = 0; i < spisoc; i++)
-      printf("| %6s |  %3.d  | %.2lf  | %s  |\n"
-            "|--------+-------+---------+------|\n",
-  student[i].name, student[i].age, student[i].height, student[i].mark); 
+    PRINT_TABLE;
 }
 
 
@@ -110,8 +109,8 @@ int main()
   //проверка что файл открылся 
   if (test==NULL)
   {
-      perror("opening file (r)");
-      return 1;
+    perror("opening file (r)");
+    return 1;
   }
   
   struct Student student[100];
@@ -125,12 +124,10 @@ int main()
   Cout(student,spisoc);
   //фильтр
   printf("\n3) фильтр все старше 16 \n");
-  printf("___________________________________\n"
-         "|  name  | age   | height  | mark |\n"
-         "|--------+-------+---------+------|\n");
+  PRINT_HEAD
   for (int i = 0; i < spisoc; i++)
     if(student[i].age>16)
-      printf("| %6s |  %3.d  | %.2lf  | %s  |\n|--------+-------+---------+------|\n", student[i].name, student[i].age, student[i].height, student[i].mark); 
+      PRINT_TABLE; 
   fclose(test);//закрытие файла
   return 0;
 }
