@@ -51,8 +51,7 @@ int main() {
       int k = 0;
       while (symbol != '\n') {
         symbol = symbol2;
-        symbol2 = fgetc(test);
-
+        symbol2 = fgetc(test);      
         if ((symbol == ',' || symbol == '[') && symbol2 == '"') {
           student[j].mark[k] = fgetc(test);
           k++;
@@ -68,7 +67,7 @@ int main() {
 
   //вывод
   printf("1)вывод\n");
-  printf("| age   | height   |\n");
+  printf("| age   | height  |\n");
   for (int i = 0; i < j; i++)
     printf("|  %3.d  | %.2lf  |%s\n", student[i].age, student[i].height, student[j].mark);
   printf("------------------\n");
@@ -87,6 +86,9 @@ int main() {
       printf("|  %3.d  | %.2lf  | %s\n", student[i].age, student[i].height,
              student[j].mark);
   printf("------------------\n");
-// блин и тут я кажется тоже что то забыл дописать после всей работы с файлами ох ырявая головушка у меня 
+// блин и тут я кажется тоже что то забыл дописать после всей работы с файлами ох дырявая головушка у меня 
   return 0;
 }
+// балиначки еще же нужно по функциям раскидать 
+// аааааа еще циклы из уикла нужно убрать 
+// нужно же в main оставить только ввод и вывод 
