@@ -33,6 +33,7 @@ struct Student
   double height;
   char name[6]
 };
+
 //вытаскиваем элементы массива из json
 void ArrJson(char symbol2, FILE *test, char *arr)
 {
@@ -58,7 +59,7 @@ void Cout(struct Student *student,int spisoc)
     PRINT_TABLE;
 }
 
-
+// заполнение структуры студента 
 int Teble(FILE *test,struct Student *student,int spisoc)
 {  
   char symbol, symbol2;
@@ -124,7 +125,7 @@ int main()
   Cout(student,spisoc);
   //фильтр
   printf("\n3) фильтр все старше 16 \n");
-  PRINT_HEAD
+  PRINT_HEAD;
   for (int i = 0; i < spisoc; i++)
     if(student[i].age>16)
       PRINT_TABLE; 

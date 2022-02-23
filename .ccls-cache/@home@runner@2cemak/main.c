@@ -16,6 +16,9 @@
 #include <stdio.h>
 #include <stdlib.h> //qsort,atoi
 
+#define PRINT_TABLE  printf("| %6s |  %3.d  | %.2lf  | %s  |\n|--------+-------+---------+------|\n",student[i].name, student[i].age, student[i].height, student[i].mark); 
+#define PRINT_HEAD  printf("___________________________________\n|  name  | age   | height  | mark |\n|--------+-------+---------+------|\n");
+
 //функции, которая умеет сравнивать два элемента массива
 int Comp(const int *i, const int *j) 
 {
@@ -28,36 +31,37 @@ struct Student
   int age;
   char mark[3];
   double height;
-  char name[10]
+  char name[6]
 };
-void ArrJson(char symbol2,struct Student *student,FILE *test)
+
+//вытаскиваем элементы массива из json
+void ArrJson(char symbol2, FILE *test, char *arr)
 {
   int index = 0;
   char symbol = symbol2;
-      while ( symbol != '\n') 
-      {
-        symbol = symbol2;
-        symbol2 = fgetc(test);
-        if ((symbol == ',' || symbol == '[') && symbol2 == '"') 
-        {
-          student->mark[index] = fgetc(test);
-          index++;
-        }
-      }
+  while ( symbol != '\n') 
+  {
+    symbol = symbol2;
+    symbol2 = fgetc(test);
+    if ((symbol == ',' || symbol == '[') && symbol2 == '"') 
+    {
+      arr[index] = fgetc(test);
+      index++;
+    }
+  }
 }
 
 //красивый вывод
-void Cout(struct Student *student,int j)
+void Cout(struct Student *student,int spisoc)
 {
-  printf("__________________________\n| age   | height  | mark |\n|-------+---------+------|\n");
-  for (int i = 0; i < j; i++)
-    printf("|  %3.d  | %.2lf  | %s  |\n|-------+---------+------|\n", student[i].age, student[i].height, student[i].mark);
+  PRINT_HEAD;
+  for (int i = 0; i < spisoc; i++)
+    PRINT_TABLE;
 }
 
-
+// заполнение структуры студента 
 int Teble(FILE *test,struct Student *student,int spisoc)
 {  
-  char *ptrEnd;
   char symbol, symbol2;
   //идем до конца файла
   while ((symbol2 = fgetc(test)) != EOF) 
@@ -69,24 +73,30 @@ int Teble(FILE *test,struct Student *student,int spisoc)
       fgets(str, 4, test); //(куда записываем ,сколько символов, поток)
       student[spisoc].age = atoi(str); //перевод из строки в int
     }
+    
     if (symbol == 'h' && symbol2 == 't') 
     {
-      char arr[8];
+      char arr[8]={};
       fseek(test, 3, SEEK_CUR);
       fgets(arr, 7, test);
       student[spisoc].height = strtod(arr, NULL); // перевод из строки в дабл
     }
+    
     if (symbol == 'r' && symbol2 == 'k') 
     {
-      ArrJson(symbol2,&student[spisoc],test);
+      char arr[10] ={};
+      ArrJson(symbol2,test,arr);
+      strcpy(student[spisoc].mark, arr);
     }
-    // if (symbol == 'm' && symbol2 == 'e') 
-    // {
-    //   ArrJson(symbol2,&student[spisoc],test);
-    // }
     
-    if (symbol == '}')
-      spisoc++;
+    if (symbol == 'm' && symbol2 == 'e') 
+    {
+      char arr[10]={};
+      ArrJson(symbol2,test,arr);
+      strcpy(student[spisoc].name, arr);
+    }
+    
+    if (symbol == '}') spisoc++; // увеличиваем количество студентов 
     symbol = symbol2;
   }
 return spisoc;
@@ -97,27 +107,28 @@ int main()
 {
   FILE* test = NULL;
   test=fopen("test.json","r");
+  //проверка что файл открылся 
   if (test==NULL)
   {
-      perror("opening file (r)");
-      return 1;
+    perror("opening file (r)");
+    return 1;
   }
   
   struct Student student[100];
   int spisoc = Teble(test,student,0);
   //вывод
-  printf("\n1)вывод\n");
+  printf("\n1) вывод\n");
   Cout(student,spisoc);
   //сортировка
-  printf("\n2)сортировка\n");
+  printf("\n2) сортировка\n");
   qsort(student, spisoc, sizeof(student[0]),Comp); // qsort или можно написать пузырек
   Cout(student,spisoc);
   //фильтр
-  printf("\n3)фильтр все старше 16 \n");
-  printf("__________________________\n| age   | height  | mark |\n|-------+---------+------|\n");
+  printf("\n3) фильтр все старше 16 \n");
+  PRINT_HEAD;
   for (int i = 0; i < spisoc; i++)
     if(student[i].age>16)
-      printf("|  %3.d  | %.2lf  | %s  |\n|-------+---------+------|\n", student[i].age, student[i].height, student[i].mark); 
+      PRINT_TABLE; 
   fclose(test);//закрытие файла
   return 0;
 }
