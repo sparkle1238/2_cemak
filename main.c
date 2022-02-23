@@ -28,57 +28,77 @@ struct Student
   int age;
   char mark[3];
   double height;
+  char name[6]
 };
 
-//красивый вывод
-void Cout(struct Student *student,int j)
+void ArrJson(char symbol2, FILE *test, char *arr)
 {
-  printf("__________________________\n| age   | height  | mark |\n|-------+---------+------|\n");
-  for (int i = 0; i < j; i++)
-    printf("|  %3.d  | %.2lf  | %s  |\n|-------+---------+------|\n", student[i].age, student[i].height, student[i].mark);
+  int index = 0;
+  char symbol = symbol2;
+  while ( symbol != '\n') 
+  {
+    symbol = symbol2;
+    symbol2 = fgetc(test);
+    if ((symbol == ',' || symbol == '[') && symbol2 == '"') 
+    {
+      arr[index] = fgetc(test);
+      index++;
+    }
+  }
+}
+
+//красивый вывод
+void Cout(struct Student *student,int spisoc)
+{
+  printf("___________________________________\n"
+         "|  name  | age   | height  | mark |\n"
+         "|--------+-------+---------+------|\n");
+  for (int i = 0; i < spisoc; i++)
+      printf("| %6s |  %3.d  | %.2lf  | %s  |\n"
+            "|--------+-------+---------+------|\n",
+  student[i].name, student[i].age, student[i].height, student[i].mark); 
 }
 
 
-int Teble(FILE *test,struct Student *student,int j)
+int Teble(FILE *test,struct Student *student,int spisoc)
 {  
   char *ptrEnd;
   char symbol, symbol2;
   //идем до конца файла
   while ((symbol2 = fgetc(test)) != EOF) 
   {
-    if (symbol == 'e' && symbol2 == '"') 
+    if (symbol == 'g' && symbol2 == 'e') 
     {
       char str[7]; //создаем временное хранилище
-      fseek(test, 2, SEEK_CUR); //курсор  : (поток,количество символов которые пропустим,откуда начинать  )
+      fseek(test, 3, SEEK_CUR); //курсор  : (поток,количество символов которые пропустим,откуда начинать  )
       fgets(str, 4, test); //(куда записываем ,сколько символов, поток)
-      student[j].age = atoi(str); //перевод из строки в int
+      student[spisoc].age = atoi(str); //перевод из строки в int
     }
-    if (symbol == 't' && symbol2 == '"') 
+    if (symbol == 'h' && symbol2 == 't') 
     {
       char arr[8];
-      fseek(test, 2, SEEK_CUR);
+      fseek(test, 3, SEEK_CUR);
       fgets(arr, 7, test);
-      student[j].height = strtod(arr, NULL); // перевод из строки в дабл
+      student[spisoc].height = strtod(arr, NULL); // перевод из строки в дабл
     }
-    if (symbol == 'k' && symbol2 == '"') 
+    if (symbol == 'r' && symbol2 == 'k') 
     {
-      int k = 0;
-      while (symbol != '\n') 
-      {
-        symbol = symbol2;
-        symbol2 = fgetc(test);
-        if ((symbol == ',' || symbol == '[') && symbol2 == '"') 
-        {
-          student[j].mark[k] = fgetc(test);
-          k++;
-        }
-      }
+      char arr[10]={};
+      ArrJson(symbol2,test,arr);
+      strcpy(student[spisoc].mark, arr);
     }
+    if (symbol == 'm' && symbol2 == 'e') 
+    {
+      char arr[10]={};
+      ArrJson(symbol2,test,arr);
+      strcpy(student[spisoc].name, arr);
+    }
+    
     if (symbol == '}')
-      j++;
+      spisoc++;
     symbol = symbol2;
   }
-return j;
+return spisoc;
 }
 
 
@@ -86,6 +106,7 @@ int main()
 {
   FILE* test = NULL;
   test=fopen("test.json","r");
+  //проверка что файл открылся 
   if (test==NULL)
   {
       perror("opening file (r)");
@@ -93,20 +114,22 @@ int main()
   }
   
   struct Student student[100];
-  int j = Teble(test,student,0);
+  int spisoc = Teble(test,student,0);
   //вывод
-  printf("\n1)вывод\n");
-  Cout(student,j);
+  printf("\n1) вывод\n");
+  Cout(student,spisoc);
   //сортировка
-  printf("\n2)сортировка\n");
-  qsort(student, j, sizeof(student[0]),Comp); // qsort или можно написать пузырек
-  Cout(student,j);
+  printf("\n2) сортировка\n");
+  qsort(student, spisoc, sizeof(student[0]),Comp); // qsort или можно написать пузырек
+  Cout(student,spisoc);
   //фильтр
-  printf("\n3)фильтр все старше 16 \n");
-  printf("__________________________\n| age   | height  | mark |\n|-------+---------+------|\n");
-  for (int i = 0; i < j; i++)
+  printf("\n3) фильтр все старше 16 \n");
+  printf("___________________________________\n"
+         "|  name  | age   | height  | mark |\n"
+         "|--------+-------+---------+------|\n");
+  for (int i = 0; i < spisoc; i++)
     if(student[i].age>16)
-      printf("|  %3.d  | %.2lf  | %s  |\n|-------+---------+------|\n", student[i].age, student[i].height, student[i].mark); 
+      printf("| %6s |  %3.d  | %.2lf  | %s  |\n|--------+-------+---------+------|\n", student[i].name, student[i].age, student[i].height, student[i].mark); 
   fclose(test);//закрытие файла
   return 0;
 }

@@ -3,60 +3,70 @@
     "age": 18,
     "mark":["l","o","l"],
     "height": 170.2,
+    "name": ["B","O","B"],
   },
     
   {
     "age": 28,
     "mark":["h","o","r"],
     "height": 190.0,
+    "name": ["D","E","D"],
   },
     
   {
     "age": 15,
     "mark":["h","o","r"],
     "height": 180.7,
+    "name": ["B","O","B","O"],
   },
     
   {
     "age": 4,
     "mark":["n","o","r"],
     "height": 270.5,
+    "name": ["S","T","E","P"],
   },
     
   {
     "age": 43,
     "mark":["k","e","k"],
     "height": 120.4,
+    "name": ["B","O","B"],
   },
   
   {
     "age": 13,
     "mark":["h","o","r"],
     "height": 180.5,
+    "name": ["N","E"," ","B","O","B"],
   },
  
   {
     "age": 100,
     "mark":["h","o","r"],
     "height": 970.9,
+    "name": ["B","O","B"],
   },
   
   {
     "age": 27,
     "mark":["h","o","r"],
     "height": 120.1,
+    "name": ["B","O","B"],
   },
   
   {
     "age": 16,
     "mark":["h","o","r"],
     "height": 120.5,
+    "name": ["B","O","B"],
   },
   
   {
     "age": 17,
     "mark":["h","o","r"],
     "height": 120.2,
+    "name": ["B","O","B"],
   }
   
 ]
