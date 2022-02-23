@@ -30,7 +30,7 @@ struct Student
   double height;
   char name[6]
 };
-
+//вытаскиваем элементы массива из json
 void ArrJson(char symbol2, FILE *test, char *arr)
 {
   int index = 0;
@@ -83,7 +83,7 @@ int Teble(FILE *test,struct Student *student,int spisoc)
     }
     if (symbol == 'r' && symbol2 == 'k') 
     {
-      char arr[10]={};
+      char arr[10] ={};
       ArrJson(symbol2,test,arr);
       strcpy(student[spisoc].mark, arr);
     }
