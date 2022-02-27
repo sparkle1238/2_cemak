@@ -18,7 +18,7 @@
 
 #define PRINT_TABLE  printf("| %6s |  %3.d  | %.2lf  | %s  |\n|--------+-------+---------+------|\n",student[i].name, student[i].age, student[i].height, student[i].mark); 
 #define PRINT_HEAD  printf("___________________________________\n|  name  | age   | height  | mark |\n|--------+-------+---------+------|\n");
-
+ 
 //функции, которая умеет сравнивать два элемента массива
 int Comp(const int *i, const int *j) 
 {
