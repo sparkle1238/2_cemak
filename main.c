@@ -58,7 +58,7 @@ void Cout(struct Student *student,int spisoc)
 }
 
 void Filter(int age,struct Student *student,int spisoc)
-{
+{  printf("\n3) фильтр все старше %i \n",age);
      printf("___________________________________\n|  name  | age   | height  | mark |\n|--------+-------+---------+------|\n");
   for (int i = 0; i < spisoc; i++)
     if(student[i].age>age)
@@ -130,7 +130,7 @@ int main()
   qsort(student, spisoc, sizeof(student[0]),Comp); // qsort или можно написать пузырек
   Cout(student,spisoc);
   //фильтр
-  printf("\n3) фильтр все старше 16 \n");
+
    Filter(16,student,spisoc);
   fclose(test);//закрытие файла
   return 0;
