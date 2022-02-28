@@ -48,15 +48,16 @@ void ArrJson(char symbol2, FILE *test, char *arr)
     }
   }
 }
-Cout(student[j].mark)
+
 //красивый вывод
-void Cout(struct Student *student.,int spisoc)
+void Cout(struct Student *student,int spisoc)
 {
    printf("___________________________________\n|  name  | age   | height  | mark |\n|--------+-------+---------+------|\n");
   for (int i = 0; i < spisoc; i++)
     printf("| %6s |  %3.d  | %.2lf  | %s  |\n|--------+-------+---------+------|\n",student[i].name, student[i].age, student[i].height, student[i].mark); 
 }
-void Filter(int age)
+
+void Filter(int age,struct Student *student,int spisoc)
 {
      printf("___________________________________\n|  name  | age   | height  | mark |\n|--------+-------+---------+------|\n");
   for (int i = 0; i < spisoc; i++)
@@ -130,7 +131,7 @@ int main()
   Cout(student,spisoc);
   //фильтр
   printf("\n3) фильтр все старше 16 \n");
-  void Filter(16);
+   Filter(16,student,spisoc);
   fclose(test);//закрытие файла
   return 0;
 }
