@@ -1,3 +1,12 @@
 {
-  "files": {}
+  "files": {
+    "main.c": [
+      {
+        "id": "475687ef-7cef-4884-b3c8-d4a437aec4a6",
+        "line": 78,
+        "version": 6106,
+        "index": 2625
+      }
+    ]
+  }
 }

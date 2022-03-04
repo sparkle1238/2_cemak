@@ -52,7 +52,7 @@ void ArrJson(char symbol2, FILE *test, char *arr)
 //красивый вывод
 void Cout(struct Student *student,int spisoc)
 {
-   printf("___________________________________\n|  name  | age   | height  | mark |\n|--------+-------+---------+------|\n");
+  printf("___________________________________\n|  name  | age   | height  | mark |\n|--------+-------+---------+------|\n");
   for (int i = 0; i < spisoc; i++)
     printf("| %6s |  %3.d  | %.2lf  | %s  |\n|--------+-------+---------+------|\n",student[i].name, student[i].age, student[i].height, student[i].mark); 
 }
@@ -60,7 +60,7 @@ void Cout(struct Student *student,int spisoc)
 void Filter(int age,struct Student *student,int spisoc)
 { 
   printf("\n3) фильтр все старше %i \n",age);
-     printf("___________________________________\n|  name  | age   | height  | mark |\n|--------+-------+---------+------|\n");
+  printf("___________________________________\n|  name  | age   | height  | mark |\n|--------+-------+---------+------|\n");
   for (int i = 0; i < spisoc; i++)
     if(student[i].age>age)
       printf("| %6s |  %3.d  | %.2lf  | %s  |\n|--------+-------+---------+------|\n",student[i].name, student[i].age, student[i].height, student[i].mark); 
@@ -69,19 +69,21 @@ void Filter(int age,struct Student *student,int spisoc)
 // заполнение структуры студента 
 int Teble(FILE *test,struct Student *student,int spisoc)
 {  
+  char title[10]={};
   char symbol, symbol2;
   //идем до конца файла
+  int size=0;
   while ((symbol2 = fgetc(test)) != EOF) 
   {
-    if (symbol == 'g' && symbol2 == 'e') 
+    if (title[0] = 'a' && title[1] == 'g' && title[2] == 'e') 
     {
-      char str[7]; //создаем временное хранилище
+      char str[7]={}; //создаем временное хранилище
       fseek(test, 3, SEEK_CUR); //курсор  : (поток,количество символов которые пропустим,откуда начинать  )
       fgets(str, 4, test); //(куда записываем ,сколько символов, поток)
       student[spisoc].age = atoi(str); //перевод из строки в int
     }
     
-    if (symbol == 'h' && symbol2 == 't') 
+    if (title[0]=='h' && title[1]=='e' && title[2]=='i' && title[3]=='g'  && title[4] == 'h' && title[5] == 't') 
     {
       char arr[8]={};
       fseek(test, 3, SEEK_CUR);
@@ -89,24 +91,31 @@ int Teble(FILE *test,struct Student *student,int spisoc)
       student[spisoc].height = strtod(arr, NULL); // перевод из строки в дабл
     }
     
-    if (symbol == 'r' && symbol2 == 'k') 
+    if (title[0]=='m' && title[1]=='a' && title[2]=='r' && title[3]=='k') 
     {
-      char arr[10] ={};
+      char arr[10]={};
       ArrJson(symbol2,test,arr);
       strcpy(student[spisoc].mark, arr);
     }
     
-    if (symbol == 'm' && symbol2 == 'e') 
+    if (title[0]=='n' && title[1]=='a' && title[2]=='m' && title[3]=='e') 
     {
       char arr[10]={};
       ArrJson(symbol2,test,arr);
       strcpy(student[spisoc].name, arr);
     }
-    
     if (symbol == '}') spisoc++; // увеличиваем количество студентов 
+    if(symbol=='"'&&symbol2!=":")size=0;
+    if(symbol=='"'&&symbol2==":")
+    {
+      fseek(test, -size+2, SEEK_CUR);
+      for(int i = 0 ;title[i]!='"';i++)
+        title[i]=fgetc(test);
+    }
     symbol = symbol2;
+    size++;
   }
-return spisoc;
+  return spisoc;
 }
 
 
@@ -115,11 +124,11 @@ int main()
   FILE* test = NULL;
   test=fopen("test.json","r");
   //проверка что файл открылся 
-  if(CheckFile()!=0) return 0; 
-  if (test==NULL )
+
+  if (test==NULL || CheckFile()!=0)
   {
     perror("opening file (r)");
-    exit(1);
+    return 0; 
   }
   
   struct Student student[100];
