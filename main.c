@@ -15,7 +15,7 @@
 
 #include <stdio.h>
 #include <stdlib.h> //qsort,atoi
-
+#include "pz8.h"
  
 //функции, которая умеет сравнивать два элемента массива
 int Comp(const int *i, const int *j) 
@@ -58,7 +58,8 @@ void Cout(struct Student *student,int spisoc)
 }
 
 void Filter(int age,struct Student *student,int spisoc)
-{  printf("\n3) фильтр все старше %i \n",age);
+{ 
+  printf("\n3) фильтр все старше %i \n",age);
      printf("___________________________________\n|  name  | age   | height  | mark |\n|--------+-------+---------+------|\n");
   for (int i = 0; i < spisoc; i++)
     if(student[i].age>age)
@@ -114,10 +115,11 @@ int main()
   FILE* test = NULL;
   test=fopen("test.json","r");
   //проверка что файл открылся 
-  if (test==NULL)
+  if(CheckFile()!=0) return 0; 
+  if (test==NULL )
   {
     perror("opening file (r)");
-    return 1;
+    exit(1);
   }
   
   struct Student student[100];
@@ -130,8 +132,7 @@ int main()
   qsort(student, spisoc, sizeof(student[0]),Comp); // qsort или можно написать пузырек
   Cout(student,spisoc);
   //фильтр
-
-   Filter(16,student,spisoc);
+  Filter(16,student,spisoc);
   fclose(test);//закрытие файла
   return 0;
 }
