@@ -51,7 +51,7 @@ void ArrJson(char symbol2, FILE *test, char *arr)
     {
       arr[index] = fgetc(test);
       index++;
-    }    
+    }
   }
 }
 
@@ -75,6 +75,7 @@ void Filter(int age,struct Student *student,int spisoc)
 // заполнение структуры студента 
 int Teble(FILE *test,struct Student *student,int spisoc)
 {  
+  fseek( test , 0 , SEEK_SET );   
   char title[11]={};
   char symbol, symbol2;
   //идем до конца файла

@@ -55,7 +55,7 @@ int CheckFile(FILE *fin)
   struct stack *stk;
   stk = (struct stack*)malloc(sizeof(struct stack));
   init(stk);
-  //файл  
+  //файл 
   // fin = NULL;
   // fin=fopen("test.json","r");
   // if (fin==NULL)
