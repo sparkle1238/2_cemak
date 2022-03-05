@@ -75,11 +75,11 @@ void Filter(int age,struct Student *student,int spisoc)
 // заполнение структуры студента 
 int Teble(FILE *test,struct Student *student,int spisoc)
 {  
-  fseek( test , 0 , SEEK_SET );   
+   
   char title[11]={};
   char symbol, symbol2;
-  //идем до конца файла
   int size=0;
+  //идем до конца файла 
   while ((symbol2 = fgetc(test)) != EOF) 
   {
     
