@@ -74,20 +74,27 @@ int CheckFile(FILE *fin)
     if ( sign=='}' && pop(stk) != '{' ) 
     { 
       perror("error"); 
+      fseek( fin , 0 , SEEK_SET );  
       return 1;
     } //{ 
     if ( sign==']' && pop(stk) != '[' )
     {
       perror("error"); 
+      fseek( fin , 0 , SEEK_SET );  
       return 1;
     } //[
     if ( sign==')' && pop(stk) != '(' )
     {
       perror("error"); 
+      fseek( fin , 0 , SEEK_SET );  
       return 1;
     } //(    
   }
   if(isempty(stk)!=1) 
+  {
+    fseek( fin , 0 , SEEK_SET );  
     return 1; 
+  }
+  fseek( fin , 0 , SEEK_SET );  
   return 0 ;
 }

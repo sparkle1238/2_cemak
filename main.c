@@ -32,7 +32,7 @@ struct Student
   char name[6];
 };
 
-void Clear(char *arr)
+void ClearArr(char *arr)
 {
   for(int i=0;i<11;i++)
     arr[i]='0';
@@ -63,7 +63,7 @@ void Cout(struct Student *student,int spisoc)
     printf("| %6s |  %3.d  | %.2lf  | %s  |\n|--------+-------+---------+------|\n",student[i].name, student[i].age, student[i].height, student[i].mark); 
 }
 
-void Filter(int age,struct Student *student,int spisoc)
+void FilterAge(int age,struct Student *student,int spisoc)
 { 
   printf("\n3) фильтр все старше %i \n",age);
   printf("___________________________________\n|  name  | age   | height  | mark |\n|--------+-------+---------+------|\n");
@@ -88,7 +88,7 @@ int Teble(FILE *test,struct Student *student,int spisoc)
       char str[7]={}; //создаем временное хранилище
       fgets(str, 4, test); //(куда записываем ,сколько символов, поток)
       student[spisoc].age = atoi(str); //перевод из строки в int
-      Clear(title);      
+      ClearArr(title); // очистить массив слова по которому мы парсим     
     }
     
     if (title[0]=='h' && title[1]=='e' && title[2]=='i' && title[3]=='g'  && title[4] == 'h' && title[5] == 't') 
@@ -96,7 +96,7 @@ int Teble(FILE *test,struct Student *student,int spisoc)
       char arr[8]={};
       fgets(arr, 8, test);
       student[spisoc].height = strtod(arr, NULL); // перевод из строки в дабл
-      Clear(title);
+      ClearArr(title);
     }
     
     if (title[0]=='m' && title[1]=='a' && title[2]=='r' && title[3]=='k') 
@@ -104,7 +104,7 @@ int Teble(FILE *test,struct Student *student,int spisoc)
       char arr[10]={};
       ArrJson(symbol2,test,arr);
       strcpy(student[spisoc].mark, arr);
-      Clear(title);
+      ClearArr(title);
     }
     
     if (title[0]=='n' && title[1]=='a' && title[2]=='m' && title[3]=='e') 
@@ -112,13 +112,13 @@ int Teble(FILE *test,struct Student *student,int spisoc)
       char arr[10]={};
       ArrJson(symbol2,test,arr);
       strcpy(student[spisoc].name, arr);
-      Clear(title);
+      ClearArr(title);
     }
     
     if (symbol == '}') spisoc++; // увеличиваем количество студентов 
     if(symbol=='"' && symbol2!=':')  size=0; // узнаем длину слова
     size++;
-    // считываем слова в ковычках 
+    // считываем слова в кавычках 
     if(symbol=='"' && symbol2==':')
     {
       fseek(test, -size, SEEK_CUR);
@@ -155,7 +155,7 @@ int main()
   qsort(student, spisoc, sizeof(student[0]),Comp); // qsort или можно написать пузырек
   Cout(student,spisoc);
   //фильтр
-  Filter(16,student,spisoc);
+  FilterAge(16,student,spisoc);
   fclose(test);//закрытие файла
   return 0;
 }
