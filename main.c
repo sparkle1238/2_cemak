@@ -93,7 +93,7 @@ int Teble(FILE *test,struct Student *student,int spisoc)
     if (title[0]=='h' && title[1]=='e' && title[2]=='i' && title[3]=='g'  && title[4] == 'h' && title[5] == 't') 
     {
       char arr[8]={};
-      fgets(arr, 6, test);
+      fgets(arr, 8, test);
       student[spisoc].height = strtod(arr, NULL); // перевод из строки в дабл
       Clear(title);
     }
