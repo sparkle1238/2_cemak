@@ -29,8 +29,14 @@ struct Student
   int age;
   char mark[3];
   double height;
-  char name[6]
+  char name[6];
 };
+
+void Clear(char *arr)
+{
+  for(int i=0;i<11;i++)
+    arr[i]='0';
+}
 
 //вытаскиваем элементы массива из json
 void ArrJson(char symbol2, FILE *test, char *arr)
@@ -69,26 +75,27 @@ void Filter(int age,struct Student *student,int spisoc)
 // заполнение структуры студента 
 int Teble(FILE *test,struct Student *student,int spisoc)
 {  
-  char title[10]={};
+  char title[11]={};
   char symbol, symbol2;
   //идем до конца файла
   int size=0;
   while ((symbol2 = fgetc(test)) != EOF) 
   {
-    if (title[0] = 'a' && title[1] == 'g' && title[2] == 'e') 
+    
+    if (title[0] == 'a' && title[1] == 'g' && title[2] == 'e') 
     {
       char str[7]={}; //создаем временное хранилище
-      fseek(test, 3, SEEK_CUR); //курсор  : (поток,количество символов которые пропустим,откуда начинать  )
       fgets(str, 4, test); //(куда записываем ,сколько символов, поток)
       student[spisoc].age = atoi(str); //перевод из строки в int
+      Clear(title);      
     }
     
     if (title[0]=='h' && title[1]=='e' && title[2]=='i' && title[3]=='g'  && title[4] == 'h' && title[5] == 't') 
     {
       char arr[8]={};
-      fseek(test, 3, SEEK_CUR);
-      fgets(arr, 7, test);
+      fgets(arr, 6, test);
       student[spisoc].height = strtod(arr, NULL); // перевод из строки в дабл
+      Clear(title);
     }
     
     if (title[0]=='m' && title[1]=='a' && title[2]=='r' && title[3]=='k') 
@@ -96,6 +103,7 @@ int Teble(FILE *test,struct Student *student,int spisoc)
       char arr[10]={};
       ArrJson(symbol2,test,arr);
       strcpy(student[spisoc].mark, arr);
+      Clear(title);
     }
     
     if (title[0]=='n' && title[1]=='a' && title[2]=='m' && title[3]=='e') 
@@ -103,20 +111,22 @@ int Teble(FILE *test,struct Student *student,int spisoc)
       char arr[10]={};
       ArrJson(symbol2,test,arr);
       strcpy(student[spisoc].name, arr);
+      Clear(title);
     }
-    if (symbol == '}') spisoc++; // увеличиваем количество студентов 
-    if(symbol=='"' && symbol2!=":") size=0;
     
-    if(symbol=='"' && symbol2==":")
+    if (symbol == '}') spisoc++; // увеличиваем количество студентов 
+    if(symbol=='"' && symbol2!=':')  size=0; // узнаем длину слова
+    size++;
+    // считываем слова в ковычках 
+    if(symbol=='"' && symbol2==':')
     {
       fseek(test, -size, SEEK_CUR);
-      for(int i = 0 ;title[i]!='"';i++)
+      for(int i = 0 ; title[i-1]!='"' ;i++)
+      {
         title[i]=fgetc(test);
-      printf("%s",title);
+      }
     }
-    
-    symbol = symbol2;
-    size++;
+    symbol = symbol2; 
   }
   return spisoc;
 }
@@ -128,7 +138,7 @@ int main()
   test=fopen("test.json","r");
   //проверка что файл открылся 
 
-  if (test==NULL || CheckFile()!=0)
+  if (test==NULL || CheckFile(test)!=0)
   {
     perror("opening file (r)");
     return 0; 
