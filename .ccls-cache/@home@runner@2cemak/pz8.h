@@ -55,14 +55,14 @@ int CheckFile(FILE *fin)
   struct stack *stk;
   stk = (struct stack*)malloc(sizeof(struct stack));
   init(stk);
-  //файл 
-  fin = NULL;
-  fin=fopen("test.json","r");
-  if (fin==NULL)
-  {
-      perror("opening file (r)");
-      return 1;
-  }
+  //файл  
+  // fin = NULL;
+  // fin=fopen("test.json","r");
+  // if (fin==NULL)
+  // {
+  //     perror("opening file (r)");
+  //     return 1;
+  // }
   //идем по файлу 
   char sign;
   while((sign=fgetc(fin)) != EOF) 

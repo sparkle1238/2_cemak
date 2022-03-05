@@ -51,7 +51,7 @@ void ArrJson(char symbol2, FILE *test, char *arr)
     {
       arr[index] = fgetc(test);
       index++;
-    }
+    }    
   }
 }
 
