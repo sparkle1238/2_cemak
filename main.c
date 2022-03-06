@@ -15,6 +15,7 @@
 
 #include <stdio.h>
 #include <stdlib.h> //qsort,atoi
+#include <string.h>
 #include "pz8.h"
  
 //функции, которая умеет сравнивать два элемента массива
@@ -152,7 +153,7 @@ int main()
   Cout(student,spisoc);
   //сортировка
   printf("\n2) сортировка\n");
-  qsort(student, spisoc, sizeof(student[0]),Comp); // qsort или можно написать пузырек
+  qsort(student, spisoc, sizeof(student[0]),(int (*)(const void *,const void *))Comp); // qsort или можно написать пузырек
   Cout(student,spisoc);
   //фильтр
   FilterAge(16,student,spisoc);
