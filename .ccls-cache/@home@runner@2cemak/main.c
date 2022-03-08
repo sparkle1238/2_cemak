@@ -44,7 +44,7 @@ void ArrJson(char symbol2, FILE *test, char *arr)
 {
   int index = 0;
   char symbol = symbol2;
-  while ( symbol != '\n') 
+  while ( symbol != ']') 
   {
     symbol = symbol2;
     symbol2 = fgetc(test);
@@ -92,10 +92,11 @@ int Teble(FILE *test,struct Student *student,int spisoc)
       ClearArr(title); // очистить массив слова по которому мы парсим     
     }
     
-    if (title[0]=='h' && title[1]=='e' && title[2]=='i' && title[3]=='g'  && title[4] == 'h' && title[5] == 't') 
+    if (title[0]=='h' && title[1]=='e' && title[2]=='i' && title[3]=='g'  
+      && title[4] == 'h' && title[5] == 't') 
     {
       char arr[8]={};
-      fgets(arr, 8, test);
+      fgets(arr, 10, test);
       student[spisoc].height = strtod(arr, NULL); // перевод из строки в дабл
       ClearArr(title);
     }

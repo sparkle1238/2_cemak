@@ -7,7 +7,7 @@
 
 // структура стека 
 struct stack {
-  float elem[NMAX];
+  char elem[NMAX];
   int top;
 };
 
@@ -17,7 +17,7 @@ void init(struct stack *stk) {
 }
 
 //кладем на верх и делаем сдвиг 
-void push(struct stack *stk, float f) {
+void push(struct stack *stk, char f) {
   if(stk->top < NMAX) {
     stk->elem[stk->top] = f;
     stk->top++;
@@ -25,8 +25,8 @@ void push(struct stack *stk, float f) {
     printf("Стек полон, количество элементов: %d !\n", stk->top);
 }
 //забираем верхний элемент
-float pop(struct stack *stk) {
-  float elem;
+char pop(struct stack *stk) {
+  char elem;
   if((stk->top) > 0)
   {
     stk->top--;
@@ -73,26 +73,22 @@ int CheckFile(FILE *fin)
     // проверка на то что у нас верхняя скобочка закрывается раньше всех 
     if ( sign=='}' && pop(stk) != '{' ) 
     { 
-      perror("error"); 
-      fseek( fin , 0 , SEEK_SET );  
+      perror("error");  
       return 1;
     } //{ 
     if ( sign==']' && pop(stk) != '[' )
     {
       perror("error"); 
-      fseek( fin , 0 , SEEK_SET );  
       return 1;
     } //[
     if ( sign==')' && pop(stk) != '(' )
     {
-      perror("error"); 
-      fseek( fin , 0 , SEEK_SET );  
+      perror("error");  
       return 1;
     } //(    
   }
   if(isempty(stk)!=1) 
-  {
-    fseek( fin , 0 , SEEK_SET );  
+  { 
     return 1; 
   }
   fseek( fin , 0 , SEEK_SET );  

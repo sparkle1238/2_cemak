@@ -33,18 +33,13 @@ struct Student
   char name[6];
 };
 
-void ClearArr(char *arr)
-{
-  for(int i=0;i<11;i++)
-    arr[i]='0';
-}
 
 //вытаскиваем элементы массива из json
 void ArrJson(char symbol2, FILE *test, char *arr)
 {
   int index = 0;
   char symbol = symbol2;
-  while ( symbol != '\n') 
+  while ( symbol != ']') 
   {
     symbol = symbol2;
     symbol2 = fgetc(test);
@@ -79,45 +74,48 @@ int Teble(FILE *test,struct Student *student,int spisoc)
    
   char title[11]={};
   char symbol, symbol2;
-  int size=0;
+  int size=0,flag=0;
   //идем до конца файла 
   while ((symbol2 = fgetc(test)) != EOF) 
-  {
-    
-    if (title[0] == 'a' && title[1] == 'g' && title[2] == 'e') 
+  {   
+    if (title[0] == 'a' && title[1] == 'g' && title[2] == 'e' && flag == 1) 
     {
       char str[7]={}; //создаем временное хранилище
-      fgets(str, 4, test); //(куда записываем ,сколько символов, поток)
+      for(int i=0;(symbol2 = fgetc(test)) != ',';i++)
+        str[i]=symbol2;
       student[spisoc].age = atoi(str); //перевод из строки в int
-      ClearArr(title); // очистить массив слова по которому мы парсим     
+      flag = 0;
     }
     
-    if (title[0]=='h' && title[1]=='e' && title[2]=='i' && title[3]=='g'  && title[4] == 'h' && title[5] == 't') 
+    if (title[0]=='h' && title[1]=='e' && title[2]=='i' && title[3]=='g'  
+     && title[4] == 'h' && title[5] == 't' && flag == 1 ) 
     {
-      char arr[8]={};
-      fgets(arr, 8, test);
-      student[spisoc].height = strtod(arr, NULL); // перевод из строки в дабл
-      ClearArr(title);
+      char str[8]={};
+      for(int i=0;(symbol2 = fgetc(test)) != ',';i++)
+        str[i]=symbol2;
+      student[spisoc].height = strtod(str, NULL); // перевод из строки в дабл
+      flag = 0;
     }
     
-    if (title[0]=='m' && title[1]=='a' && title[2]=='r' && title[3]=='k') 
+    if (title[0]=='m' && title[1]=='a' && title[2]=='r' && title[3]=='k'&& flag == 1) 
     {
-      char arr[10]={};
-      ArrJson(symbol2,test,arr);
-      strcpy(student[spisoc].mark, arr);
-      ClearArr(title);
+      char str[10]={};
+      ArrJson(symbol2,test,str);
+      strcpy(student[spisoc].mark, str);
+      flag = 0;
     }
     
-    if (title[0]=='n' && title[1]=='a' && title[2]=='m' && title[3]=='e') 
+    if (title[0]=='n' && title[1]=='a' && title[2]=='m' && title[3]=='e'&& flag == 1) 
     {
-      char arr[10]={};
-      ArrJson(symbol2,test,arr);
-      strcpy(student[spisoc].name, arr);
-      ClearArr(title);
+      char str[10]={};
+      ArrJson(symbol2,test,str);
+      strcpy(student[spisoc].name, str);
+      flag = 0;
     }
-    
     if (symbol == '}') spisoc++; // увеличиваем количество студентов 
-    if(symbol=='"' && symbol2!=':')  size=0; // узнаем длину слова
+    
+    if(symbol=='"' && symbol2!=':')  
+      size=0; // узнаем длину слова
     size++;
     // считываем слова в кавычках 
     if(symbol=='"' && symbol2==':')
@@ -127,7 +125,8 @@ int Teble(FILE *test,struct Student *student,int spisoc)
       {
         title[i]=fgetc(test);
       }
-    }
+      flag = 1;
+    }    
     symbol = symbol2; 
   }
   return spisoc;
