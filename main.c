@@ -16,8 +16,10 @@
 #include <stdio.h>
 #include <stdlib.h> //qsort,atoi
 #include <string.h>
-#include "pz8.h"
- 
+#include <time.h>
+
+#include "pz8.h" 
+
 //функции, которая умеет сравнивать два элемента массива
 int Comp(const int *i, const int *j) 
 {
@@ -68,6 +70,12 @@ void FilterAge(int age,struct Student *student,int spisoc)
       printf("| %6s |  %3.d  | %.2lf  | %s  |\n|--------+-------+---------+------|\n",student[i].name, student[i].age, student[i].height, student[i].mark); 
 }
 
+void ArrClaer(char *arr)
+{
+for(int i=0;i<11;i++)
+  arr[i]='\000';
+}
+
 // заполнение структуры студента 
 int Teble(FILE *test,struct Student *student,int spisoc)
 {  
@@ -78,39 +86,42 @@ int Teble(FILE *test,struct Student *student,int spisoc)
   //идем до конца файла 
   while ((symbol2 = fgetc(test)) != EOF) 
   {   
-    if (title[0] == 'a' && title[1] == 'g' && title[2] == 'e' && flag == 1) 
+    if (title[0] == 'a' && title[1] == 'g' && title[2] == 'e' /*strcmp("age",title)&& flag == 1 */) 
     {
       char str[7]={}; //создаем временное хранилище
       for(int i=0;(symbol2 = fgetc(test)) != ',';i++)
         str[i]=symbol2;
       student[spisoc].age = atoi(str); //перевод из строки в int
-      flag = 0;
+      //flag = 0;
+      ArrClaer(title);
     }
     
     if (title[0]=='h' && title[1]=='e' && title[2]=='i' && title[3]=='g'  
-     && title[4] == 'h' && title[5] == 't' && flag == 1 ) 
+     && title[4] == 'h' && title[5] == 't' /*&& flag == 1 */) 
     {
       char str[8]={};
       for(int i=0;(symbol2 = fgetc(test)) != ',';i++)
         str[i]=symbol2;
       student[spisoc].height = strtod(str, NULL); // перевод из строки в дабл
-      flag = 0;
+      ArrClaer(title);
     }
     
-    if (title[0]=='m' && title[1]=='a' && title[2]=='r' && title[3]=='k'&& flag == 1) 
+    if (title[0]=='m' && title[1]=='a' && title[2]=='r' && title[3]=='k'/*&& flag == 1 */) 
     {
       char str[10]={};
       ArrJson(symbol2,test,str);
       strcpy(student[spisoc].mark, str);
-      flag = 0;
+      //flag = 0;
+      ArrClaer(title);
     }
     
-    if (title[0]=='n' && title[1]=='a' && title[2]=='m' && title[3]=='e'&& flag == 1) 
+    if (title[0]=='n' && title[1]=='a' && title[2]=='m' && title[3]=='e'/*&& flag == 1 */) 
     {
       char str[10]={};
       ArrJson(symbol2,test,str);
       strcpy(student[spisoc].name, str);
-      flag = 0;
+      //flag = 0;
+      ArrClaer(title);
     }
     if (symbol == '}') spisoc++; // увеличиваем количество студентов 
     
@@ -121,11 +132,14 @@ int Teble(FILE *test,struct Student *student,int spisoc)
     if(symbol=='"' && symbol2==':')
     {
       fseek(test, -size, SEEK_CUR);
-      for(int i = 0 ; title[i-1]!='"' ;i++)
+      int i = 0;
+      for( ; title[i-1]!='"' ;i++)
       {
         title[i]=fgetc(test);
       }
+      title[i-1]='\000';
       flag = 1;
+
     }    
     symbol = symbol2; 
   }
@@ -136,15 +150,15 @@ int Teble(FILE *test,struct Student *student,int spisoc)
 int main() 
 {
   FILE* test = NULL;
-  test=fopen("test.json","r");
+  test = fopen("test.json","r");
   //проверка что файл открылся 
-
   if (test==NULL || CheckFile(test)!=0)
   {
     perror("opening file (r)");
     return 0; 
   }
-  
+
+  long long int start = clock();
   struct Student student[100];
   int spisoc = Teble(test,student,0);
   //вывод
@@ -156,6 +170,8 @@ int main()
   Cout(student,spisoc);
   //фильтр
   FilterAge(16,student,spisoc);
+  
+  printf(" %lli\n",clock() - start);
   fclose(test);//закрытие файла
   return 0;
 }

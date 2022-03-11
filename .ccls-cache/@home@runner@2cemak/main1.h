@@ -6,7 +6,7 @@ int main()
 {
   unsigned int max = UINT_MAX;
   unsigned int min = 0 ;
-  printf("max = %u\nmin = %u",max,min);
+  printf("max = %u \nmin = %u ",max,min);
   
   return 0;
 }

@@ -24,6 +24,7 @@ void push(struct stack *stk, char f) {
   } else
     printf("Стек полон, количество элементов: %d !\n", stk->top);
 }
+
 //забираем верхний элемент
 char pop(struct stack *stk) {
   char elem;
@@ -39,6 +40,7 @@ char pop(struct stack *stk) {
   }
 }
 
+
 int isempty(struct stack *stk) {
   if(stk->top == 0)   
     return 1;
@@ -48,21 +50,10 @@ int isempty(struct stack *stk) {
 
 int CheckFile(FILE *fin)
 { 
-  //строчка
-  // char *arr = (char*)malloc(1024 * sizeof(char));
-  // fgets(arr,1023,stdin);
   // стек
   struct stack *stk;
   stk = (struct stack*)malloc(sizeof(struct stack));
   init(stk);
-  //файл 
-  // fin = NULL;
-  // fin=fopen("test.json","r");
-  // if (fin==NULL)
-  // {
-  //     perror("opening file (r)");
-  //     return 1;
-  // }
   //идем по файлу 
   char sign;
   while((sign=fgetc(fin)) != EOF) 
