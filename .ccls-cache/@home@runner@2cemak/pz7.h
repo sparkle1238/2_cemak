@@ -10,7 +10,7 @@ char * LittleEndian(unsigned int values)
     char *n = (unsigned char*)malloc(1024*sizeof(unsigned char*));
     for (size_t i = 0; i < bytes; i++)
     {
-        n[i] = *((unsigned char*)& values + i);
+        n[i] = *((unsigned char*)& values << i);
     }
     return n;
 }

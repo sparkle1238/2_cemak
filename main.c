@@ -77,51 +77,26 @@ void ArrClaer(char *arr)
     arr[i]='\000';
 }
 
+void NumArr(char *str,FILE *test)
+{
+  char symbol2;
+  fseek(test,1,SEEK_CUR);
+      for(int i=0;(symbol2 = fgetc(test)) != ',';i++)
+        str[i]=symbol2;
+}
+
 // заполнение структуры студента из файла json
 int Teble(FILE *test,struct Student *student,int spisoc)
 {  
   char title[11]={},symbol, symbol2;
   int size=0;
+ 
   //идем до конца файла 
   while ((symbol2 = fgetc(test)) != EOF) 
   {   
-    if (strcmp("age",title) == 0) 
-    {
-      char str[7]={}; //создаем временное хранилище
-      for(int i=0;(symbol2 = fgetc(test)) != ',';i++)
-        str[i]=symbol2;
-      student[spisoc].age = atoi(str); //перевод из строки в int
-      ArrClaer(title);
-    }
-    
-    if (strcmp("height",title) == 0 ) 
-    {
-      char str[8]={};
-      for(int i=0;(symbol2 = fgetc(test)) != ',';i++)
-        str[i]=symbol2;
-      student[spisoc].height = strtod(str, NULL); // перевод из строки в дабл
-      ArrClaer(title);
-    }
-    
-    if (strcmp("mark",title) == 0) 
-    {
-      char str[10]={};
-      ArrJson(symbol2,test,str);
-      strcpy(student[spisoc].mark, str);
-      ArrClaer(title);
-    }
-    
-    if (strcmp("name",title) == 0) 
-    {
-      char str[10]={};
-      ArrJson(symbol2,test,str);
-      strcpy(student[spisoc].name, str);
-      ArrClaer(title);
-    }
-    if (symbol == '}') spisoc++; // увеличиваем количество студентов   
     if(symbol == '"' && symbol2 != ':') size=0; // узнаем длину слова
     size++;
-    // считываем слова в кавычках 
+    
     if(symbol == '"' && symbol2 == ':')
     {
       fseek(test, -size, SEEK_CUR);
@@ -131,7 +106,42 @@ int Teble(FILE *test,struct Student *student,int spisoc)
         title[i]=fgetc(test);
       }
       title[i-1]='\000';
-    }    
+    }  
+    
+    else if (strcmp("age",title) == 0) 
+    {
+      char str[7]={}; //создаем временное хранилище
+      NumArr(str,test);
+      student[spisoc].age = atoi(str); //перевод из строки в int
+      ArrClaer(title);
+    }
+    
+    else if (strcmp("height",title) == 0 ) 
+    {
+      char str[8]={};
+      NumArr(str,test);
+      student[spisoc].height = strtod(str, NULL); // перевод из строки в дабл
+      ArrClaer(title);
+    }
+    
+    else if (strcmp("mark",title) == 0) 
+    {
+      char str[10]={};
+      ArrJson(symbol2,test,str);
+      strcpy(student[spisoc].mark, str);
+      ArrClaer(title);
+    }
+    
+    else if (strcmp("name",title) == 0) 
+    {
+      char str[10]={};
+      ArrJson(symbol2,test,str);
+      strcpy(student[spisoc].name, str);
+      ArrClaer(title);
+    }
+      
+    else if (symbol == '}') spisoc++; // увеличиваем количество студентов   
+     
     symbol = symbol2; 
   }
   return spisoc;
